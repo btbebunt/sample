@@ -33,7 +33,7 @@ export default function Home() {
                 !['Улаанбаатарт ирсэн', 'Эрээн-> Улаанбаатар', 'Эрээнд ирсэн'].includes(item.properties?.Status?.status?.name)
             );
 
-            setResults([...mainPriorityResults,...otherResults]);
+            setResults([...mainPriorityResults, ...otherResults]);
         } catch (error) {
             console.error('Error searching Notion:', error);
         } finally {
@@ -65,14 +65,14 @@ export default function Home() {
                 <div className="w-full mx-auto items-center">
                     {/* Header Section */}
                     <div className="w-full px-10 h-[100px] bg-[#000000] flex items-center justify-center text-white gap-4 font-bold text-[20px]">
-                    <Image
-                    src="/logo1.png"
-                    alt="Uni Cargo Logo"
-                    width={120}
-                    height={120}
-                    priority
-                    className="mt-5"
-/>
+                        <Image
+                            src="/logo1.png"
+                            alt="Uni Cargo Logo"
+                            width={120}
+                            height={120}
+                            priority
+                            className="mt-5"
+                        />
 
                         <p className="mt-6"> Ачаа шалгах</p>
                     </div>
@@ -101,45 +101,53 @@ export default function Home() {
                         </div>
                     </form>
                     {!hasSearched && (
-        <div className="bg-[#000000] text-[#ffffff] p-6 rounded-md shadow-md max-w-[756px] mx-auto">
-            <h2 className=" flex items-center justify-center text-xl font-bold mb-4">"Карго"</h2>
-            
-            <p className="mb-2">
-            Бид танд дараах үйлчилгээг санал болгож байна:
-            </p>
-            <ul className="list-disc list-inside">
-                <li className='font-bold'>Текст</li>
-                <p className="mb-4">
-                - Текст/<br/> 
-                - Текст/<br/>
-                - Текст
-                </p>
-                <li className='font-bold'>Текст</li>
-                <p className="mb-4">
-                Текст
-                </p>
-                <li className='font-bold'>Текст</li>
-                <p className="mb-4">
-                Текст
-                <br/> Үүнд:<br/>
-                - Текст<br/>
-                - Текст<br/>
-                - Текст<br/>
-            </p>
-            <p className="mb-2">
-            Текст
-            </p>
-            </ul>
-        </div>
-    )}
+                        <div className="bg-[#000000] text-[#ffffff] p-6 rounded-md shadow-md max-w-[756px] mx-auto">
+                            <h2 className=" flex items-center justify-center text-xl font-bold mb-4">"Карго"</h2>
+
+                            <p className="mb-2">
+                                Бид танд дараах үйлчилгээг санал болгож байна:
+                            </p>
+                            <ul className="list-disc list-inside">
+                                <li className='font-bold'>Текст</li>
+                                <p className="mb-4">
+                                    - Текст/<br />
+                                    - Текст/<br />
+                                    - Текст
+                                </p>
+                                <li className='font-bold'>Текст</li>
+                                <p className="mb-4">
+                                    Текст
+                                </p>
+                                <li className='font-bold'>Текст</li>
+                                <p className="mb-4">
+                                    Текст
+                                    <br /> Үүнд:<br />
+                                    - Текст<br />
+                                    - Текст<br />
+                                    - Текст<br />
+                                </p>
+                                <p className="mb-2">
+                                    Текст
+                                </p>
+                            </ul>
+                        </div>
+                    )}
 
                     {/* Search Results */}
                     <div className="w-full max-w-[1200px] mx-auto text-[16px] mb-10">
                         {hasSearched && (
                             <div className="flex justify-between mb-3">
-                                <div className="font-extrabold md:text-lg">Илэрц</div>
+                                <div className="font-extrabold md:text-lg">Нийт {results.length} ачаа</div>
                                 <div className="md:text-lg">
-                                    <span className="font-extrabold text-primary">Нийт {results.length} ачаа</span>
+                                    <span className="font-extrabold text-primary">
+                                            {results.reduce((sum, result) => {
+                                            // "Хүлээн авсан" 상태를 제외하고 합계 계산
+                                            if (result.properties?.Status?.status?.name !== "Хүлээн авсан") {
+                                                return sum + Number(result.properties?.Price?.number ?? 0);
+                                            }
+                                            return sum;
+                                        }, 0).toLocaleString()} ₮
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -151,7 +159,7 @@ export default function Home() {
                                     return (
                                         <div
                                             key={index}
-                                            className={`w-full flex items-center justify-between p-4 border border-[#15B8BF] border-solid rounded-md md:h-[64px]  ${result?.properties?.Status?.status?.name === "Хүлээн авсан" ? ' bg-[#333D47]' : 'bg-[#000000]'} my-1`}
+                                            className={`w-full flex items-center justify-between p-4 border border-[#15B8BF] border-solid rounded-md md:h-[64px] ${result?.properties?.Status?.status?.name === "Хүлээн авсан" ? ' bg-[#333D47]' : 'bg-[#000000]'} my-1`}
                                         >
                                             <div className="flex md:flex-row flex-col gap-1 md:gap-[100px]">
                                                 <div className="text-[#FFFFFF] flex items-center gap-2">
@@ -189,6 +197,7 @@ export default function Home() {
                                 )}
                             </div>
                         )}
+
                     </div>
                 </div>
 
